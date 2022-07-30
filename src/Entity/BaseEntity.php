@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\OrM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 class BaseEntity implements EntityBaseInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'interger')]
+    #[ORM\Column(type: 'integer')]
     protected int $id;
 
     #[ORM\Column(name: 'created_at', type: 'datetimetz', nullable: false)]
     protected ?DateTime $createdAt = null;
 
-    #[ORM\Column(name: 'update_at', type: 'datetimetz', nullable: true)]
+    #[ORM\Column(name: 'updated_at', type: 'datetimetz', nullable: true)]
     protected ?DateTime $updatedAt = null;
 
     #[ORM\PrePersist]

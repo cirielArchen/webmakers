@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
@@ -14,7 +12,6 @@ class WeatherApi
 {
     public function __construct(
         private readonly HttpClientInterface $client,
-        private readonly SerializerInterface $serializer,
         ){
     }
 

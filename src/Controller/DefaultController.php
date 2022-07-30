@@ -4,15 +4,19 @@ namespace App\Controller;
 
 use App\Entity\History;
 use App\Service\WeatherApi;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\Manager\HistoryManager;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DefaultController extends AbstractController
 {
     public function __construct(
         private readonly WeatherApi $weatherApi,
+        private readonly HistoryManager $manager,
         ){
     }
 
@@ -23,9 +27,22 @@ class DefaultController extends AbstractController
     }
 
     #[Route('/history', name: 'history')]
-    public function history(): Response
+    public function history(Request $request): Response
     {
-        return $this->render('default/history.html.twig');
+        $page = $request->query->get('page') ?? 1;
+        $limit = $request->query->get('limit') ?? 10; 
+
+        return $this->render('default/history.html.twig', [
+            'paginated' => $this->manager->listPaginated($page, $limit),
+            'maxPage' => intval(count($this->manager->listPaginated($page, $limit))/$limit),
+            'page' => $page,
+            'limit' => $limit,
+            'averageTemperature' => round($this->manager->averageTemperature(), 2),
+            'maxTemperature' => $this->manager->maxTemperature(),
+            'minTemperature' => $this->manager->minTemperature(),
+            'searchQuantity' => count($this->manager->listPaginated($page, $limit)),
+            'frequentlySearchedCity' => $this->manager->frequentlySearchedCity()['city'],
+        ]);
     }
 
     #[Route('/getWeather', name: 'getWeather', methods: ['POST'])]
@@ -37,8 +54,8 @@ class DefaultController extends AbstractController
         $longitude = $latLng['lng'];
 
         $response = $this->weatherApi->getWeather($latitude, $longitude);
-
-        $entity = new History();
+        
+        $this->manager->save((new History()), $response);
 
         return new Response($response, 200);
     }

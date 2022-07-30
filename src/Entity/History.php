@@ -4,25 +4,31 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\OrM\Mapping as ORM;
+use App\Repository\HistoryRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
-#[ORM\Entity(repositoryClass: HistoryRepository::class)]
+#[ORM\Entity(repositoryClass: HistoryRepository::class), HasLifecycleCallbacks]
+#[ORM\Table(name: 'history')]
 class History extends BaseEntity
 {
-    #[ORM\Column(name: 'temperature', type: 'integer', nullable: false)]
-    private int $temperature;
+    #[ORM\Column(name: 'temperature', type: 'float', nullable: false)]
+    private float $temperature;
 
     #[ORM\Column(name: 'cloudy', type: 'integer', nullable: false)]
     private int $cloudy;
 
-    #[ORM\Column(name: 'wind', type: 'integer', nullable: false)]
-    private int $wind;
+    #[ORM\Column(name: 'wind', type: 'float', nullable: false)]
+    private float $wind;
 
-    #[ORM\Column(name: 'description', type: 'Integer', nullable: false)]
-    private int $description;
+    #[ORM\Column(name: 'description', type: 'string', nullable: false)]
+    private string $description;
 
-    #[ORM\Column(name: 'coordinates', type: 'string', nullable: false)]
-    private string $coordinates;
+    #[ORM\Column(name: 'longitude', type: 'float', nullable: false)]
+    private float $longitude;
+
+    #[ORM\Column(name: 'latitude', type: 'float', nullable: false)]
+    private float $latitude;
 
     #[ORM\Column(name: 'city', type: 'string', nullable: false)]
     private string $city;
@@ -75,14 +81,26 @@ class History extends BaseEntity
         return $this;
     }
 
-    public function getCoordinates()
+    public function getLongitude()
     {
-        return $this->coordinates;
+        return $this->longitude;
     }
 
-    public function setCoordinates($coordinates)
+    public function setLongitude($longitude)
     {
-        $this->coordinates = $coordinates;
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

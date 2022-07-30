@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\OrM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
 interface EntityBaseInterface
 {

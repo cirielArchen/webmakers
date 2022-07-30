@@ -1,33 +1,107 @@
-<div>
-    <h4 class="text-center my-2">Historia wyszukań</h4>
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            </tr>
-            <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-            </tr>
-            <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-            </tr>
-        </tbody>
-    </table>
+{% extends 'base.html.twig' %}
+
+{% block title %}Historia i statystyki{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="text-center mt-5">
+        <h1>Historia i statystyki</h1>
+    </div>
+
+    <div class="row my-5">
+        <div class="row text-center">
+            <div class="col">
+            <p class="display-3">{{ minTemperature }} °C</p>
+                <p class="fs-4">Minimalna temperatura <i class="fa fa-thermometer-1 fs-1" aria-hidden="true"></i><p>
+            </div>
+            <div class="col">
+                <p class="display-3">{{ averageTemperature }} °C</p>
+                <p class="fs-4">Średnia temperatura <i class="fa fa-thermometer-2 fs-1" aria-hidden="true"></i><p>
+            </div>
+            <div class="col">
+                <p class="display-3">{{ maxTemperature }} °C</p>
+                <p class="fs-4">Maksymalna temperatura <i class="fa fa-thermometer-4 fs-1" aria-hidden="true"></i><p>
+            </div>
+        </div>
+
+        <div class="row text-center mt-3">
+            <div class="col">
+                <p class="display-3">{{ frequentlySearchedCity }}</p>
+                <p class="fs-4">Najczęściej wyszukiwane miasto <i class="fa-solid fa-magnifying-glass fs-1"></i><p>
+            </div>
+            <div class="col">
+                <p class="display-3">{{ searchQuantity }}</p>
+                <p class="fs-4">Ilość łącznych wyszukiwań <i class="fa-solid fa-hashtag fs-1"></i><p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row my-5">
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Temperatura [°C]</th>
+                <th scope="col">Zachmurzenie [%]</th>
+                <th scope="col">Prędkość wiatru [m/s]</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Długość geograficzna</th>
+                <th scope="col">Szerokość geograficzna</th>
+                <th scope="col">Miejscowość</th>
+                <th scope="col">Data pomiaru</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for phistory in paginated %}
+                    <tr>
+                        <th>{{ phistory.id }}</th>
+                        <td>{{ phistory.temperature }}</td>
+                        <td>{{ phistory.cloudy }}</td>
+                        <td>{{ phistory.wind }}</td>
+                        <td>{{ phistory.description }}</td>
+                        <td>{{ phistory.longitude }}</td>
+                        <td>{{ phistory.latitude }}</td>
+                        <td>{{ phistory.city }}</td>
+                        <td>{{ phistory.createdAt|date("Y-m-d H:i:s") }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        {% if page > 1 %}
+                            <a class="page-link" href="{{ path('history', { 'page': page - 1, 'limit': limit }) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% else %}
+
+                        {% endif %}
+                    </li>
+
+                    {% for i in 1.. maxPage + 1 %}
+                        <li class="page-item"><a class="page-link" href="{{ path('history', { 'page': i, 'limit': limit }) }}">{{ i }}</a></li>
+                    {% endfor %}
+
+                    <li class="page-item">
+                        {% if page < maxPage %}
+                            <a class="page-link" href="{{ path('history', { 'page': page + 1, 'limit': limit }) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% else %}
+
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>
+
+
+{% endblock %}
+
