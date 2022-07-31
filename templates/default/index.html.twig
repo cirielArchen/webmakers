@@ -54,6 +54,8 @@
         xhr.onload = function () {
             const response = JSON.parse(this.responseText);
 
+            console.log(response);
+
             modal.innerHTML = buildModal(response);
             modal.style.display = "block";
             document.body.style.pointerEvents = "none";
