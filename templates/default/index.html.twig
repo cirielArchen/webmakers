@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="container" id="all">
+<div class="container" id="main">
     <div class="text-center mt-2">
         <h1>Sprawdź pogodę</h1>
         <p>Kliknij na mapę, aby sprawdzić pogodę w tym miejscu</p>
@@ -14,12 +14,14 @@
         <div id="map"></div>
     </div>
 
-    <div id="output" class="modal">
+    <div id="modal" class="modal">
 </div>
 
+<div id="cover-spin"></div>
 
 <script>
-    var modal = document.getElementById('output');
+    var modal = document.getElementById('modal');
+    var coverSpin = document.getElementById('cover-spin');
 
     var startLongitude = 52;
     var startLatitude = 21;
@@ -37,13 +39,8 @@
     .openOn(map);
 
     function onMapClick(e) {
-        popup
-        .setLatLng(e.latlng)
-        .setContent("Kliknąłeś w współrzędne: " + e.latlng)
-        .openOn(map);
-
-        var loaderId = document.getElementById('loaderId');
-        loaderId.style.display = "block";
+        coverSpin.style.display = "block";
+        document.body.style.pointerEvents = "none";
 
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{{ path('getWeather') }}", true);
@@ -54,23 +51,19 @@
         xhr.onload = function () {
             const response = JSON.parse(this.responseText);
 
-            console.log(response);
-
             modal.innerHTML = buildModal(response);
             modal.style.display = "block";
-            document.body.style.pointerEvents = "none";
 
             document.getElementById('modalBtn').onclick = function() {
                 modal.style.display = "none";
-                document.body.style.pointerEvents = "";
             }
 
             window.onclick = function(event) {
                 modal.style.display = "none";
-                document.body.style.pointerEvents = "";
             }
 
-            loaderId.style.display = "none";
+            coverSpin.style.display = "none";
+            document.body.style.pointerEvents = "";
         }
     }
 
@@ -78,4 +71,3 @@
 </script>
 
 {% endblock %}
-
