@@ -83,7 +83,7 @@
                         {% endif %}
                     </li>
 
-                    {% for i in 1.. maxPage + 1 %}
+                    {% for i in 1.. maxPage %}
                         <li class="page-item"><a class="page-link" href="{{ path('history', { 'page': i, 'limit': limit }) }}">{{ i }}</a></li>
                     {% endfor %}
 
