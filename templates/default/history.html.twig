@@ -70,6 +70,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if paginated|length > limit %}
         <div class="d-flex justify-content-center">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -83,12 +84,12 @@
                         {% endif %}
                     </li>
 
-                    {% for i in 1.. maxPage %}
+                    {% for i in 1.. maxPage + 1 %}
                         <li class="page-item"><a class="page-link" href="{{ path('history', { 'page': i, 'limit': limit }) }}">{{ i }}</a></li>
                     {% endfor %}
 
                     <li class="page-item">
-                        {% if page < maxPage %}
+                        {% if page < maxPage + 1 %}
                             <a class="page-link" href="{{ path('history', { 'page': page + 1, 'limit': limit }) }}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -99,6 +100,9 @@
                 </ul>
             </nav>
         </div>
+        {% else %}
+
+        {% endif %}
     </div>
 </div>
 

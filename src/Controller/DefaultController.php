@@ -37,11 +37,11 @@ class DefaultController extends AbstractController
             'maxPage' => intval(count($this->manager->listPaginated($page, $limit))/$limit),
             'page' => $page,
             'limit' => $limit,
-            'averageTemperature' => round($this->manager->averageTemperature(), 2),
-            'maxTemperature' => $this->manager->maxTemperature(),
-            'minTemperature' => $this->manager->minTemperature(),
+            'averageTemperature' => round($this->manager->averageTemperature(), 2) ?? 0,
+            'maxTemperature' => $this->manager->maxTemperature() ?? 0,
+            'minTemperature' => $this->manager->minTemperature() ?? 0,
             'searchQuantity' => count($this->manager->listPaginated($page, $limit)),
-            'frequentlySearchedCity' => $this->manager->frequentlySearchedCity()['city'],
+            'frequentlySearchedCity' => $this->manager->frequentlySearchedCity()['city'] ?? 'Brak',
         ]);
     }
 

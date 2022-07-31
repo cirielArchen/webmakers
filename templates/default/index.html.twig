@@ -99,15 +99,15 @@
         .setContent("Kliknąłeś w współrzędne: " + e.latlng)
         .openOn(map);
 
+        var loaderId = document.getElementById('loaderId');
+        loaderId.style.display = "block";
+
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "{{ path('getWeather') }}", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({
             latlng: e.latlng 
         }));
-
-        var loaderId = document.getElementById('loaderId');
-        loaderId.style.display = "block";
 
         xhr.onload = function () {
             const obj = JSON.parse(this.responseText);

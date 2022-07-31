@@ -25,7 +25,7 @@ class HistoryRepository extends EntityRepository
         return new Paginator($query, $fetchJoinCollection = true);
     }
 
-    public function averageTemperature(): float
+    public function averageTemperature(): ?float
     {
         return $this->createQueryBuilder('h')
             ->select('avg(h.temperature)')
@@ -33,7 +33,7 @@ class HistoryRepository extends EntityRepository
             ->getSingleScalarResult();
     }
 
-    public function maxTemperature(): float
+    public function maxTemperature(): ?float
     {
         return $this->createQueryBuilder('h')
             ->select('max(h.temperature)')
@@ -41,7 +41,7 @@ class HistoryRepository extends EntityRepository
             ->getSingleScalarResult();
     }
 
-    public function minTemperature(): float
+    public function minTemperature(): ?float
     {
         return $this->createQueryBuilder('h')
             ->select('min(h.temperature)')
@@ -49,15 +49,29 @@ class HistoryRepository extends EntityRepository
             ->getSingleScalarResult();
     }
 
-    public function frequentlySearchedCity(): array
+    public function frequentlySearchedCity(): ?array
     {
-        return $this->createQueryBuilder('h')
+        $count = $this->createQueryBuilder('h')
+            ->select('count(h.city)')
+            ->groupBy('h.city')
+            ->orderBy('count(h.city)', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if(is_null($count)) {
+            return [];
+        }
+
+        $result = $this->createQueryBuilder('h')
             ->select('h.city')
             ->groupBy('h.city')
             ->orderBy('count(h.city)', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
+
+        return $count[1] !== 1 ? $result : [];
     }
 
     public function save(History $entity, bool $flush = true): History

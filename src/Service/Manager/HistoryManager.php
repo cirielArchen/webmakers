@@ -23,22 +23,22 @@ class HistoryManager
         return $this->getRepository()->listPaginated($page, $limit);
     }
 
-    public function averageTemperature(): float
+    public function averageTemperature(): ?float
     {
         return $this->getRepository()->averageTemperature();
     }
 
-    public function maxTemperature(): float
+    public function maxTemperature(): ?float
     {
         return $this->getRepository()->maxTemperature();
     }
 
-    public function minTemperature(): float
+    public function minTemperature(): ?float
     {
         return $this->getRepository()->minTemperature();
     }
 
-    public function frequentlySearchedCity(): array
+    public function frequentlySearchedCity(): ?array
     {
         return $this->getRepository()->frequentlySearchedCity();
     }
