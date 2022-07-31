@@ -49,9 +49,8 @@ class DefaultController extends AbstractController
     public function getCoordinates(Request $request): Response
     {
         $parameters = json_decode($request->getContent(), true);
-        $latLng =  $parameters['latlng'];
-        $latitude = $latLng['lat'];
-        $longitude = $latLng['lng'];
+        $latitude = $parameters['latlng']['lat'];
+        $longitude = $parameters['latlng']['lng'];
 
         $response = $this->weatherApi->getWeather($latitude, $longitude);
         
